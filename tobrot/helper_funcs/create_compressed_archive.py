@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K | gautamajay52
 
-import asyncio
-import logging
-import os
-import shutil
 # the logging things
-import subprocess
-
+import logging
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 LOGGER = logging.getLogger(__name__)
+
+import asyncio
+import os
+import shutil
+import subprocess
 
 
 async def create_archive(input_directory):
@@ -24,8 +24,7 @@ async def create_archive(input_directory):
         # #BlameTelegram
         suffix_extention_length = 1 + 3 + 1 + 2
         if len(base_dir_name) > (64 - suffix_extention_length):
-            compressed_file_name = base_dir_name[0:(
-                64 - suffix_extention_length)]
+            compressed_file_name = base_dir_name[0:(64 - suffix_extention_length)]
             compressed_file_name += ".tar.gz"
         # fix for https://t.me/c/1434259219/13344
         file_genertor_command = [
@@ -52,8 +51,7 @@ async def create_archive(input_directory):
             return_name = compressed_file_name
     return return_name
 
-# @gautamajay52
-
+#@gautamajay52
 
 async def unzip_me(input_directory):
     return_name = None
@@ -62,12 +60,11 @@ async def unzip_me(input_directory):
         uncompressed_file_name = os.path.splitext(base_dir_name)[0]
         # #BlameTelegram
         #suffix_extention_length = 1 + 3 + 1 + 2
-        # if len(base_dir_name) > (64 - suffix_extention_length):
-        #compressed_file_name = base_dir_name[0:(64 - suffix_extention_length)]
-        #compressed_file_name += ".tar.gz"
+        #if len(base_dir_name) > (64 - suffix_extention_length):
+            #compressed_file_name = base_dir_name[0:(64 - suffix_extention_length)]
+            #compressed_file_name += ".tar.gz"
         # fix for https://t.me/c/1434259219/13344
-        g_cmd = ["unzip", "-o", f"{base_dir_name}",
-                 "-d", f"{uncompressed_file_name}"]
+        g_cmd = ["unzip", "-o", f"{base_dir_name}", "-d", f"{uncompressed_file_name}"]
         ga_utam = await asyncio.create_subprocess_exec(*g_cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
         # Wait for the subprocess to finish
         gau, tam = await ga_utam.communicate()
@@ -84,8 +81,6 @@ async def unzip_me(input_directory):
             print(return_name)
     return return_name
 #
-
-
 async def untar_me(input_directory):
     return_name = None
     if os.path.exists(input_directory):
@@ -94,8 +89,7 @@ async def untar_me(input_directory):
         uncompressed_file_name = os.path.splitext(base_dir_name)[0]
         m_k_gaut = ['mkdir', f'{uncompressed_file_name}']
         await asyncio.create_subprocess_exec(*m_k_gaut, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-        g_cmd_t = ["tar", "-xvf",
-                   f"/app/{base_dir_name}", "-C", f"{uncompressed_file_name}"]
+        g_cmd_t = ["tar", "-xvf", f"/app/{base_dir_name}", "-C", f"{uncompressed_file_name}"]
         bc_kanger = await asyncio.create_subprocess_exec(*g_cmd_t, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
         # Wait for the subprocess to finish
         mc, kanger = await bc_kanger.communicate()
@@ -112,8 +106,6 @@ async def untar_me(input_directory):
             LOGGER.info(return_name)
     return return_name
 #
-
-
 async def unrar_me(input_directory):
     return_name = None
     if os.path.exists(input_directory):
@@ -122,8 +114,7 @@ async def unrar_me(input_directory):
         m_k_gau = ['mkdir', f'{uncompressed_file_name}']
         await asyncio.create_subprocess_exec(*m_k_gau, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
         print(base_dir_name)
-        gau_tam_r = ["unrar", "x",
-                     f"{base_dir_name}", f"{uncompressed_file_name}"]
+        gau_tam_r = ["unrar", "x", f"{base_dir_name}", f"{uncompressed_file_name}"]
         jai_hind = await asyncio.create_subprocess_exec(*gau_tam_r, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
         # Wait for the subprocess to finish
         jai, hind = await jai_hind.communicate()

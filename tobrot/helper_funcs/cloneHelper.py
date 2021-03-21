@@ -1,20 +1,17 @@
-# This is code to clone the gdrive link using the gclone, all credit goes to the developer who has developed the rclone/glclone
+#This is code to clone the gdrive link using the gclone, all credit goes to the developer who has developed the rclone/glclone
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) gautamajay52
 
 
+import subprocess
 import asyncio
-import logging
 import os
 import re
-import subprocess
-
 import pyrogram.types as pyrogram
 import requests
-from tobrot import (DESTINATION_FOLDER, DOWNLOAD_LOCATION, EDIT_SLEEP_TIME_OUT,
-                    INDEX_LINK, RCLONE_CONFIG, TG_MAX_FILE_SIZE, UPLOAD_AS_DOC)
 
+import logging
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -22,6 +19,16 @@ logging.basicConfig(
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
+
+from tobrot import (
+    TG_MAX_FILE_SIZE,
+    EDIT_SLEEP_TIME_OUT,
+    DOWNLOAD_LOCATION,
+    DESTINATION_FOLDER,
+    RCLONE_CONFIG,
+    INDEX_LINK,
+    UPLOAD_AS_DOC
+)
 
 
 class CloneHelper:
@@ -34,20 +41,22 @@ class CloneHelper:
         self.lsg = ""
         self.filee = ""
         self.u_id = self.mess.from_user.id
-        self.dname = ""
-
+        
+    
     def config(self):
-        if not os.path.exists('rclone.conf'):
-            with open('rclone.conf', 'w+', newline="\n", encoding='utf-8') as fole:
-                fole.write(f"{RCLONE_CONFIG}")
-        if os.path.exists("rclone.conf"):
-            with open("rclone.conf", "r+") as file:
-                con = file.read()
-                self.dname = re.findall("\[(.*)\]", con)[0]
-
+        with open(
+            'rclone.conf',
+            'a',
+            newline="\n",
+            encoding= 'utf-8'
+        ) as fole:
+            fole.write("[DRIVE]\n")
+            fole.write(f"{RCLONE_CONFIG}")
+            
+            
     def get_id(self):
         mes = self.mess
-        txt = mes.reply_to_message.text
+        txt= mes.reply_to_message.text
         LOGGER.info(txt)
         mess = txt.split(" ", maxsplit=1)
         if len(mess) == 2:
@@ -60,7 +69,8 @@ class CloneHelper:
             LOGGER.info(self.g_id)
             self.name = ""
         return self.g_id, self.name
-
+        
+        
     async def link_gen_size(self):
         if self.name is not None:
             _drive = ""
@@ -76,16 +86,16 @@ class CloneHelper:
             g_name = re.escape(self.name)
             LOGGER.info(g_name)
             destination = f'{DESTINATION_FOLDER}'
-
+            
             with open(
                 'filter1.txt',
                 'w+',
-                encoding='utf-8'
+                encoding= 'utf-8'
             ) as filter1:
                 print(f"+ {g_name}{_ui}\n- *",
-                      file=filter1
-                      )
-
+                file=filter1
+            )
+            
             g_a_u = [
                 'rclone',
                 'lsf',
@@ -94,7 +104,7 @@ class CloneHelper:
                 'i',
                 "--filter-from=./filter1.txt",
                 f"{_flag}",
-                f'{self.dname}:{destination}'
+                f'DRIVE:{destination}'
             ]
             LOGGER.info(g_a_u)
             gau_tam = await asyncio.create_subprocess_exec(
@@ -107,15 +117,14 @@ class CloneHelper:
             gautam = gau.decode("utf-8")
             LOGGER.info(gautam)
             LOGGER.info(tam.decode('utf-8'))
-
+            
             if _drive == "folderba":
                 gautii = f"https://drive.google.com/folderview?id={gautam}"
             else:
                 gautii = f"https://drive.google.com/file/d/{gautam}/view?usp=drivesdk"
-
+                
             LOGGER.info(gautii)
-            gau_link = re.search(
-                "(?P<url>https?://[^\s]+)", gautii).group("url")
+            gau_link = re.search("(?P<url>https?://[^\s]+)", gautii).group("url")
             LOGGER.info(gau_link)
             button = []
             button.append(
@@ -124,7 +133,7 @@ class CloneHelper:
                         text="☁️ CloudUrl ☁️",
                         url=f"{gau_link}"
                     )
-                ]
+            ]
             )
             if INDEX_LINK:
                 if _flag == "--files-only":
@@ -133,8 +142,7 @@ class CloneHelper:
                     indexurl = f"{INDEX_LINK}/{self.name}/"
                 tam_link = requests.utils.requote_uri(indexurl)
                 LOGGER.info(tam_link)
-                button.append([pyrogram.InlineKeyboardButton(
-                    text="ℹ️ IndexUrl ℹ️", url=f"{tam_link}")])
+                button.append([pyrogram.InlineKeyboardButton(text="ℹ️ IndexUrl ℹ️", url=f"{tam_link}")])
             button_markup = pyrogram.InlineKeyboardMarkup(button)
             msg = await self.lsg.edit_text(
                 f"🤖: {_up} cloned successfully in your Cloud <a href='tg://user?id={self.u_id}'>🤒</a>\
@@ -146,7 +154,7 @@ class CloneHelper:
                 'rclone',
                 'size',
                 '--config=rclone.conf',
-                f'{self.dname}:{destination}/{self.name}'
+                f'DRIVE:{destination}/{self.name}'
             ]
             LOGGER.info(g_cmd)
             gaut_am = await asyncio.create_subprocess_exec(
@@ -165,17 +173,18 @@ class CloneHelper:
                 reply_markup=button_markup,
                 parse_mode="html"
             )
-
+            
+            
+		
     async def gcl(self):
         self.lsg = await self.mess.reply_text(f"Cloning...you should wait 🤒")
         destination = f'{DESTINATION_FOLDER}'
-        idd = '{'f'{self.g_id}''}'
         cmd = [
             "/app/gautam/gclone",
             "copy",
             "--config=rclone.conf",
-            f"{self.dname}:{idd}",
-            f"{self.dname}:{destination}/{self.name}",
+            "DRIVE:{"f"{self.g_id}""}",
+            f"DRIVE:{destination}/{self.name}",
             "-v",
             "--drive-server-side-across-configs",
             "--transfers=16",
@@ -185,7 +194,7 @@ class CloneHelper:
         pro = await asyncio.create_subprocess_exec(
             *cmd,
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            stderr= asyncio.subprocess.PIPE
         )
         p, e = await pro.communicate()
         self.out = p

@@ -1,3 +1,4 @@
+# [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 # for support join here [TorrentLeech-Gdrive](https://telegram.dog/GBotStore)
 # working example group [Leech Here](https://telegram.dog/GBotStore)
 
@@ -20,8 +21,6 @@ A Telegram Torrent (and youtube-dl) Leecher based on [Pyrogram](https://github.c
     ✓ Option to select either video will be uploaded as document or streamable
     ✓ Added /renewme command to clear the downloads which are not deleted automatically.
     ✓ Added support for youtube playlist 😐
-    ✓ Renaming of Telegram files support added. 😐
-    ✓ Changing rclone destination config on fly (By using `/rlcone` in private mode)
     ✓
     
 # TO-DO
@@ -81,24 +80,6 @@ Follow and fill all the required variables that were already filled in the sampl
 
 If you need more explanation about any variable then read [app.jso](https://github.com/gautamajay52/TorrentLeech-Gdrive/blob/master/app.jso)
 
-##### Set Rclone
-
-1. Set Rclone locally by following the official repo : https://rclone.org/docs/
-2. Get your `rclone.conf` file.
-will look like this
-```
-[NAME]
-type = 
-scope =
-token =
-client_id = 
-client_secret = 
-
-```
-2 Copy `rclone.conf` file in the root directory (Where `Dockerfile` exists).
-
-3 Your config can contains multiple drive entries.(Default: First one and change using `/rclone` command)
-
 ## Deploying
 
 - Start docker daemon (skip if already running):
@@ -118,8 +99,8 @@ sudo docker run torrentleech-gdrive
 Simply clone the repository and run the main file:
 
 ```sh
-git clone https://github.com/gautamajay52/TorrentLeech-Gdrive
-cd TorrentLeech-Gdrive
+git clone https://github.com/SpEcHiDe/PublicLeech.git
+cd PublicLeech
 python3 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
@@ -156,7 +137,43 @@ class Config(Config):
 
 * `OWNER_ID`: ID of the bot owner, He/she can be abled to access bot in bot only mode too(private mode).
 
-* `INDEX_LINK`
+##### Set Rclone
+
+1. Set Rclone locally by following the official repo : https://rclone.org/docs/
+2. Get your `rclone.conf` file.
+will look like this
+```
+[NAME]
+type = 
+scope =
+token =
+client_id = 
+client_secret = 
+
+```
+3. Only copy the config of drive u want to upload file.
+4. Copy the entries of `rclone.conf` 
+5. Your copied config should look like this:
+ ```
+type = 
+scope =
+token =
+client_id = 
+client_secret = 
+
+and everythin except `[NAME]`
+
+```
+
+6. Paste copied config in `RCLONE_CONFIG`
+
+7. Hit deploy button.
+8. Examples:-
+<p align="center">
+
+  <img src="https://raw.githubusercontent.com/gautamajay52/TorrentLeech-Gdrive/master/rclone.jpg" width="470" height="150">
+
+</p>
 
 ## FAQ
 
@@ -204,22 +221,10 @@ class Config(Config):
 
 * `CLONE_COMMAND_G`
 
-* `UPLOAD_COMMAND`
-
-* `RENEWME_COMMAND`
-
-* `SAVE_THUMBNAIL`
-
-* `CLEAR_THUMBNAIL`
-
-* `GET_SIZE_G`
-
 * `UPLOAD_AS_DOC`: Takes two option True or False. If True file will be uploaded as document. This is for people who wants video files as document instead of streamable.
 
 * `INDEX_LINK`: (Without `/` at last of the link, otherwise u will get error) During creating index, plz fill `Default Root ID` with the id of your `DESTINATION_FOLDER` after creating. Otherwise index will not work properly.
 ## Available Commands
-
-* `/rclone`: This will change your drive config on fly.(First one will be default)
 
 * `/gclone`: This command is used to clone gdrive files or folder using gclone.
        
@@ -265,15 +270,13 @@ class Config(Config):
 
 * `/getsize`: This will give you total size of your destination folder in cloud.
 
-* `/renewme`: This will clear the remains of downloads which are not getting deleted after upload of the file or after /cancel command.
-
-* `/rename`: To rename the telegram files.
+* `/renewme`: This will clear the remains of downloads which are not getting deleted after upload of the file or after /cancel command. 
 
 
-* ~Only work with direct link and youtube link for now~It is like u can add custom name as prefix of the original file name.
+* [Only work with direct link and youtube link for now]It is like u can add custom name as prefix of the original file name.
 Like if your file name is `gk.txt` uploaded will be what u add in `CUSTOM_FILE_NAME` + `gk.txt`
 
-~Only works with direct link/youtube link.No magnet or torrent.~
+Only works with direct link/youtube link.No magnet or torrent.
 
 And also added custom name like...
 

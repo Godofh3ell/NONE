@@ -2,16 +2,8 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-import asyncio
-import json
-import logging
-import os
-
-import pyrogram.types as pyrogram
 # the logging things
-from tobrot import DEF_THUMB_NAIL_VID_S
-from tobrot.helper_funcs.display_progress import humanbytes
-
+import logging
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -20,7 +12,16 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
+import asyncio
+from tobrot.helper_funcs.display_progress import humanbytes
+import json
+import os
+import pyrogram.types as pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
+
+from tobrot import (
+    DEF_THUMB_NAIL_VID_S
+)
 
 
 async def extract_youtube_dl_formats(url, cf_name, yt_dl_user_name, yt_dl_pass_word, user_working_dir):
@@ -98,9 +99,7 @@ async def extract_youtube_dl_formats(url, cf_name, yt_dl_user_name, yt_dl_pass_w
                     approx_file_size = ""
                     if "filesize" in formats:
                         approx_file_size = humanbytes(formats["filesize"])
-                    dipslay_str_uon = " " + format_string + \
-                        " (" + format_ext.upper() + ") " + \
-                        approx_file_size + " "
+                    dipslay_str_uon = " " + format_string + " (" + format_ext.upper() + ") " + approx_file_size + " "
                     cb_string_video = "{}|{}|{}".format(
                         "video", format_id, format_ext)
                     ikeyboard = []
@@ -109,8 +108,7 @@ async def extract_youtube_dl_formats(url, cf_name, yt_dl_user_name, yt_dl_pass_w
                             ikeyboard = [
                                 pyrogram.InlineKeyboardButton(
                                     dipslay_str_uon,
-                                    callback_data=(
-                                        cb_string_video).encode("UTF-8")
+                                    callback_data=(cb_string_video).encode("UTF-8")
                                 )
                             ]
                     else:
@@ -118,8 +116,7 @@ async def extract_youtube_dl_formats(url, cf_name, yt_dl_user_name, yt_dl_pass_w
                             ikeyboard = [
                                 pyrogram.InlineKeyboardButton(
                                     dipslay_str_uon,
-                                    callback_data=(
-                                        cb_string_video).encode("UTF-8")
+                                    callback_data=(cb_string_video).encode("UTF-8")
                                 )
                             ]
                         else:
@@ -129,8 +126,7 @@ async def extract_youtube_dl_formats(url, cf_name, yt_dl_user_name, yt_dl_pass_w
                                     "SVideo [" +
                                     "] ( " +
                                     approx_file_size + " )",
-                                    callback_data=(
-                                        cb_string_video).encode("UTF-8")
+                                    callback_data=(cb_string_video).encode("UTF-8")
                                 )
                             ]
                     inline_keyboard.append(ikeyboard)

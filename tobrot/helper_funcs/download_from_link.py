@@ -2,14 +2,8 @@
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K
 
-import asyncio
-import logging
-import os
-import time
-
 # the logging things
-from tobrot import DOWNLOAD_LOCATION
-
+import logging
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -18,9 +12,18 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
+import asyncio
+import time
+
+import os
+
+from tobrot import (
+    DOWNLOAD_LOCATION
+)
+
+
 async def request_download(url, file_name, r_user_id):
-    directory_path = os.path.join(
-        DOWNLOAD_LOCATION, str(r_user_id), str(time.time()))
+    directory_path = os.path.join(DOWNLOAD_LOCATION, str(r_user_id), str(time.time()))
     # create download directory, if not exist
     if not os.path.isdir(directory_path):
         os.makedirs(directory_path)
